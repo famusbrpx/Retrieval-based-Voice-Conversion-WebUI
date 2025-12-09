@@ -1,7 +1,3 @@
-Perfeito — traduzi 100% do README.md para português brasileiro e deixei pronto em formato Markdown para você só colar e subir no GitHub. A tradução foi feita com base no arquivo original enviado. 
-
-Copie tudo entre as crases abaixo para um README.md novo no seu repositório:
-
 <div align="center">
 
 <h1>Retrieval-based-Voice-Conversion-WebUI</h1>
@@ -70,188 +66,150 @@ Escolha um dos métodos a seguir.
 1. Instale o Pytorch e dependências centrais (se já estiverem instalados, pule esta etapa). Referência: https://pytorch.org/get-started/locally/
 ```bash
 pip install torch torchvision torchaudio
-
+```
 2. Em sistemas Windows com GPUs Nvidia Ampere (RTX30xx), de acordo com a issue #21, pode ser necessário especificar a versão do CUDA compatível com o PyTorch:
-
-
-
+```bash
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu117
-
+```
 3. Instale dependências conforme sua placa:
-
-
-
-Nvidia (N-card)
-
-
+- Nvidia (N-card)
+```bash
 pip install -r requirements.txt
-
-AMD / Intel (A-card / I-card)
-
-
+```
+- AMD / Intel (A-card / I-card)
+```bash
 pip install -r requirements-dml.txt
-
-AMD ROCm (Linux)
-
-
+```
+- AMD ROCm (Linux)
+```bash
 pip install -r requirements-amd.txt
-
-Intel IPEX (Linux)
-
-
+```
+- Intel IPEX (Linux)
+```bash
 pip install -r requirements-ipex.txt
+```
 
-2. Instalar dependências com Poetry
-
+#### 2. Instalar dependências com Poetry
 Instale o gerenciador Poetry (se já tiver, ignore). Referência: https://python-poetry.org/docs/#installation
-
+```bash
 curl -sSL https://install.python-poetry.org | python3 -
+```
 
-Ao usar Poetry, recomenda-se Python 3.7–3.10, pois versões fora desse intervalo podem causar conflito na instalação do llvmlite==0.39.0.
-
+Ao usar Poetry, recomenda-se Python 3.7–3.10, pois versões fora desse intervalo podem causar conflito na instalação do `llvmlite==0.39.0`.
+```bash
 poetry init -n
 poetry env use "caminho/para/seu/python.exe"
 poetry run pip install -r requirments.txt
+```
 
-MacOS
-
-Você pode usar o script run.sh para instalar dependências:
-
+### MacOS
+Você pode usar o script `run.sh` para instalar dependências:
+```bash
 sh ./run.sh
+```
 
-Preparação de outros pré-modelos
-
+## Preparação de outros pré-modelos
 RVC necessita de alguns pré-modelos adicionais para inferência e treinamento.
 
-Você pode baixar esses modelos no nosso Hugging Face space.
+Você pode baixar esses modelos no nosso [Hugging Face space](https://huggingface.co/lj1995/VoiceConversionWebUI/tree/main/).
 
-1. Baixar assets
+### 1. Baixar assets
+Abaixo está a lista de nomes de todos os pré-modelos e outros arquivos requeridos pelo RVC. Há scripts na pasta `tools` para baixar esses arquivos automaticamente.
 
-Abaixo está a lista de nomes de todos os pré-modelos e outros arquivos requeridos pelo RVC. Há scripts na pasta tools para baixar esses arquivos automaticamente.
+- ./assets/hubert/hubert_base.pt
 
-./assets/hubert/hubert_base.pt
+- ./assets/pretrained 
 
-./assets/pretrained
-
-./assets/uvr5_weights
-
+- ./assets/uvr5_weights
 
 Se quiser usar modelos da versão v2, será necessário baixar também:
 
-./assets/pretrained_v2
+- ./assets/pretrained_v2
 
+### 2. Instalar ffmpeg
+Se `ffmpeg` e `ffprobe` já estiverem instalados, pule esta etapa.
 
-2. Instalar ffmpeg
-
-Se ffmpeg e ffprobe já estiverem instalados, pule esta etapa.
-
-Usuários Ubuntu/Debian
-
+#### Usuários Ubuntu/Debian
+```bash
 sudo apt install ffmpeg
-
-Usuários MacOS
-
+```
+#### Usuários MacOS
+```bash
 brew install ffmpeg
-
-Usuários Windows
-
+```
+#### Usuários Windows
 Baixe os executáveis e coloque-os no diretório raiz do projeto.
+- Baixe [ffmpeg.exe](https://huggingface.co/lj1995/VoiceConversionWebUI/blob/main/ffmpeg.exe)
 
-Baixe ffmpeg.exe
+- Baixe [ffprobe.exe](https://huggingface.co/lj1995/VoiceConversionWebUI/blob/main/ffprobe.exe)
 
-Baixe ffprobe.exe
-
-
-3. Baixar arquivos necessários para o algoritmo de extração de pitch RMVPE
-
+### 3. Baixar arquivos necessários para o algoritmo de extração de pitch RMVPE
 Se deseja usar o algoritmo RMVPE (Melhore extração de pitch), baixe o parâmetro do modelo e coloque na raiz do RVC.
 
-Baixe rmvpe.pt
+- Baixe [rmvpe.pt](https://huggingface.co/lj1995/VoiceConversionWebUI/blob/main/rmvpe.pt)
 
+#### (Opcional) Baixar a versão ONNX do rmvpe para ambientes DML (usuários A-card / I-card)
+- Baixe [rmvpe.onnx](https://huggingface.co/lj1995/Voice-Conversion-WebUI/blob/main/rmvpe.onnx)
 
-(Opcional) Baixar a versão ONNX do rmvpe para ambientes DML (usuários A-card / I-card)
-
-Baixe rmvpe.onnx
-
-
-4. AMD ROCm (opcional, somente Linux)
-
+### 4. AMD ROCm (opcional, somente Linux)
 Se deseja rodar RVC com ROCm em GPUs AMD no Linux, instale os drivers conforme a documentação oficial: https://rocm.docs.amd.com/en/latest/deploy/linux/os-native/install.html
 
 Se estiver em Arch Linux, é possível instalar via pacman:
-
+```bash
 pacman -S rocm-hip-sdk rocm-opencl-sdk
+```
 
 Para algumas GPUs (ex.: RX6700XT) pode ser necessário configurar variáveis de ambiente:
-
+```bash
 export ROCM_PATH=/opt/rocm
 export HSA_OVERRIDE_GFX_VERSION=10.3.0
-
-Também garanta que seu usuário pertença aos grupos render e video:
-
+```
+Também garanta que seu usuário pertença aos grupos `render` e `video`:
+```bash
 sudo usermod -aG render $USERNAME
 sudo usermod -aG video $USERNAME
+```
 
-Começando
-
-Inicialização direta
-
+## Começando
+### Inicialização direta
 Use o comando abaixo para iniciar a WebUI:
-
+```bash
 python infer-web.py
+```
 
 Se você instalou dependências via Poetry, inicie com:
-
+```bash
 poetry run python infer-web.py
+```
 
-Usando o pacote integrado (bundle)
+### Usando o pacote integrado (bundle)
+Baixe e extraia `RVC-beta.7z`
 
-Baixe e extraia RVC-beta.7z
+#### Usuários Windows
+Dê um duplo clique em `go-web.bat`
 
-Usuários Windows
-
-Dê um duplo clique em go-web.bat
-
-Usuários MacOS
-
+#### Usuários MacOS
+```bash
 sh ./run.sh
+```
 
-Para usuários I-card que precisam usar IPEX (somente Linux)
-
+### Para usuários I-card que precisam usar IPEX (somente Linux)
+```bash
 source /opt/intel/oneapi/setvars.sh
+```
 
-Projetos de referência
+## Projetos de referência
++ [ContentVec](https://github.com/auspicious3000/contentvec/)
++ [VITS](https://github.com/jaywalnut310/vits)
++ [HIFIGAN](https://github.com/jik876/hifi-gan)
++ [Gradio](https://github.com/gradio-app/gradio)
++ [FFmpeg](https://github.com/FFmpeg/FFmpeg)
++ [Ultimate Vocal Remover](https://github.com/Anjok07/ultimatevocalremovergui)
++ [audio-slicer](https://github.com/openvpi/audio-slicer)
++ [Extração de pitch: RMVPE](https://github.com/Dream-High/RMVPE)
+  + O modelo pré-treinado foi treinado e testado por [yxlllc](https://github.com/yxlllc/RMVPE) e [RVC-Boss](https://github.com/RVC-Boss).
 
-ContentVec
-
-VITS
-
-HIFIGAN
-
-Gradio
-
-FFmpeg
-
-Ultimate Vocal Remover
-
-audio-slicer
-
-Extração de pitch: RMVPE
-
-O modelo pré-treinado foi treinado e testado por yxlllc e RVC-Boss.
-
-
-
-Agradecimentos a todos os contribuintes
-
+## Agradecimentos a todos os contribuintes
 <a href="https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI/graphs/contributors" target="_blank">
   <img src="https://contrib.rocks/image?repo=RVC-Project/Retrieval-based-Voice-Conversion-WebUI" />
 </a>
-```Se quiser, eu também posso:
-
-Gerar o arquivo README.md aqui mesmo e disponibilizar um link para download; ou
-
-Ajustar o texto para um tom mais formal/institucional ou mais curto (resumo) antes de subir.
-
-
-Qual prefere?
